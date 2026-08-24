@@ -1,0 +1,27 @@
+# Local data and credentials
+F:/data/
+*.zip
+*.feather
+*.parquet
+*.pkl
+*.pickle
+*.ipynb
+*.part
+*.log
+*.err
+**/cookies*.json
+**/*credential*
+**/*password*
+
+# Python caches and local tooling
+__pycache__/
+.pytest_cache/
+.playwright-mcp/
+.agents/
+.codex-worklog/
+.task/
+runtime/
+
+# Generated research outputs; retain small manifests/docs explicitly
+outputs/
+reports/generated/
