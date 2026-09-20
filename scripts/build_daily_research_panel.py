@@ -16,6 +16,10 @@ CONFIG = Path(__file__).resolve().parents[1] / "config" / "index_universe.json"
 def main():
     prices = pd.read_csv(INDEX_PANEL, parse_dates=["trade_date"], dtype={"index_code": str})
     prices = prices.sort_values(["index_code", "trade_date"])
+    # The raw union panel deliberately contains pre-inception placeholder rows
+    # for indices that did not yet exist. They remain in the raw audit, but
+    # must never enter feature, return, label, or equity-curve calculations.
+    prices = prices.loc[prices["open"].notna() & prices["close"].notna()].copy()
     grouped = prices.groupby("index_code", group_keys=False)
     prices["ret_1d_close_to_close"] = grouped["close"].pct_change(fill_method=None)
     prices["next_open_to_open"] = grouped["open"].shift(-2).div(grouped["open"].shift(-1)).sub(1)

@@ -1,0 +1,9 @@
+{
+  "execution_price_proxy": "next_trading_day_open",
+  "holding_return": "next_open_to_open",
+  "commission_one_way": 0.0003,
+  "slippage_one_way": 0.0005,
+  "total_cost_one_way": 0.0008,
+  "cost_formula": "abs(position_change) * (commission_one_way + slippage_one_way)",
+  "index_note": "Index points are not directly tradable; costs are a conservative execution proxy and are applied to every reported strategy return."
+}

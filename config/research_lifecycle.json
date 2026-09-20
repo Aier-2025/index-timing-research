@@ -1,0 +1,21 @@
+{
+  "current_data_cutoff": "2026-08-24",
+  "current_runs_status": "training_and_backtest_only",
+  "phases": {
+    "train": {
+      "purpose": "fit models and construct candidate features",
+      "can_change_strategy": true
+    },
+    "backtest": {
+      "purpose": "evaluate a frozen strategy on the complete concatenated backtest interval",
+      "can_change_strategy": false,
+      "max_runs_per_strategy": 1,
+      "current_status": "available_for_research_comparison"
+    }
+  },
+  "backtest_policy": {
+    "backtest_results_cannot_feed_training": true,
+    "failed_backtest_requires_new_strategy_cycle": true,
+    "failed_backtest_must_not_be_retested_with_same_strategy": true
+  }
+}

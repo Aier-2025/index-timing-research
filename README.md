@@ -24,3 +24,5 @@ pytest -q
 ```
 
 详细设计见 `docs/research_design.md`。
+
+训练集与回测集纪律见 `docs/research_lifecycle_protocol.md`。所有回测结果均按完整拼接区间整体评价。

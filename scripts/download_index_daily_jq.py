@@ -44,6 +44,11 @@ INDICES = {
         "candidates": ["932000.CSI", "932000.XSHG", "932000.SH"],
         "expected_start": "2023-08-11",
     },
+    "399303": {
+        "name_zh": "国证2000",
+        "candidates": ["399303.XSHE", "399303.SZ"],
+        "expected_start": "2005-01-04",
+    },
 }
 
 

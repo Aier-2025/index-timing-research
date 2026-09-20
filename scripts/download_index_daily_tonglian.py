@@ -12,7 +12,7 @@ import pymysql
 
 DEFAULT_CREDENTIALS = Path(r"G:\data\TonglianData\通联数据.txt")
 DEFAULT_OUTPUT = Path(r"F:\data\index_timing_raw\932000_中证2000_daily_tonglian.csv")
-START_DATE = date(2023, 8, 11)
+START_DATE = date(2004, 12, 31)
 END_DATE = date.today()
 
 
@@ -26,7 +26,7 @@ def parse_credentials(path):
     return {"host": host, "port": int(port), "user": values["user"], "password": values["pwd"]}
 
 
-def query_index(connection, code):
+def query_index(connection, code, start_date, end_date):
     sql = """
         SELECT TICKER_SYMBOL, EXCHANGE_CD, TRADE_DATE,
                PRE_CLOSE_INDEX, OPEN_INDEX, HIGHEST_INDEX, LOWEST_INDEX,
@@ -37,7 +37,7 @@ def query_index(connection, code):
         ORDER BY TRADE_DATE
     """
     with connection.cursor() as cursor:
-        cursor.execute(sql, (code, START_DATE, END_DATE))
+        cursor.execute(sql, (code, start_date, end_date))
         rows = cursor.fetchall()
         columns = [column[0] for column in cursor.description]
     return pd.DataFrame(rows, columns=columns)
@@ -71,11 +71,13 @@ def main():
     parser.add_argument("--credentials-file", type=Path, default=DEFAULT_CREDENTIALS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--code", default="932000")
+    parser.add_argument("--start-date", default=START_DATE.isoformat())
+    parser.add_argument("--end-date", default=END_DATE.isoformat())
     args = parser.parse_args()
 
     connection = pymysql.connect(database="TonglianData", charset="utf8mb4", connect_timeout=30, **parse_credentials(args.credentials_file))
     try:
-        raw = query_index(connection, args.code)
+        raw = query_index(connection, args.code, args.start_date, args.end_date)
     finally:
         connection.close()
     result = normalize(raw)
@@ -86,8 +88,8 @@ def main():
     manifest = {
         "source": "TonglianData.mkt_idxd_csi",
         "code": args.code,
-        "requested_start": START_DATE.isoformat(),
-        "requested_end": END_DATE.isoformat(),
+        "requested_start": args.start_date,
+        "requested_end": args.end_date,
         "rows": int(len(result)),
         "first_date": str(result["trade_date"].iloc[0]),
         "last_date": str(result["trade_date"].iloc[-1]),
